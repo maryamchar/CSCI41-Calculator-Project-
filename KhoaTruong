@@ -1,0 +1,355 @@
+#include <iostream>
+#include <string>
+#include "hash.h"
+#include <vector>
+using namespace std;
+
+
+class VARIABLE {
+private:
+	char name1;
+	char name2;
+	int value1;
+	int value2;
+public:
+	VARIABLE(){};
+	VARIABLE(char new_name1, char new_name2, int new_value1, int new_value2) {
+		name1 = new_name1;
+		name2 = new_name2;
+		value1 = new_value1;
+		value2 = new_value2;
+	}
+	void set_name1(char var) {
+		name1 = var;
+	}
+	char get_name1() {
+		return name1;
+	}
+	void set_name2(char var) {
+		name2 = var;
+	}
+	char get_name2() {
+		return name2;
+	}
+	void set_value1(int a) {
+		value1 = a;
+	}
+	int get_value1() {
+		return value1;
+	}
+	void set_value2(int b) {
+		value2 = b;
+	}
+	int get_value2() {
+		return value2;
+	}
+};
+
+class OPERATION{
+private:
+	int position;
+	char operators;
+public:
+	OPERATION(){};
+	OPERATION(int new_position, char new_operators) {
+		position = new_position;
+		operators = new_operators;		
+	}
+	void set_position(int pos) {
+		position = pos;
+	}
+	char get_position() {
+		return position;
+	}
+	void set_operators(char oper) {
+		operators = oper;
+	}
+	char get_operators() {
+		return operators;
+	}
+};
+
+class LOOP {
+private:
+	int loop;
+public:
+	LOOP(){};
+	LOOP(int new_loop) {
+		loop = new_loop;
+	}
+	void set_loop(int n) {
+		loop = n;
+	}
+	int get_loop() {
+		return loop;
+	}
+};
+
+void die() {
+	cout << "BAD INPUT\n";
+	exit(EXIT_FAILURE);
+}
+
+void uppercaseify(string& mystr);
+bool checkinput_let(string& input);
+bool checkinput_variable(string& str);
+char get_variable_name(string& str);
+int get_variable_value(string& str);
+bool check_range_value(int value);
+void erase_space(string& str);
+vector<OPERATION> check_operator(string& input);
+
+vector<LOOP> ivec;
+vector<VARIABLE> data;
+vector<OPERATION> operations;
+
+int main() {
+
+	string operation1;
+	string operation2;
+	string calculator;
+	
+	char var_name_1;
+	char var_name_2;
+	int x = 0;
+	int y = 0;
+
+	while (cin) {
+
+		getline(cin, operation1);
+		getline(cin, operation2);
+
+		uppercaseify(operation1);
+		uppercaseify(operation2);
+
+		if (!cin || operation1 == "quit") {
+			die();
+		}
+		if (checkinput_let(operation1) && checkinput_variable(operation1) && checkinput_let(operation2) && checkinput_variable(operation2)){
+			var_name_1 = get_variable_name(operation1);
+			var_name_2 = get_variable_name(operation2);
+			x = get_variable_value(operation1);
+			y = get_variable_value(operation2);
+			// Check duplicate variable
+			if (var_name_1 != var_name_2) {
+				if (check_range_value(x) && check_range_value(y)) {
+					VARIABLE record;
+					record.set_name1(var_name_1);
+					record.set_name2(var_name_2);
+					record.set_value1(x);
+					record.set_value2(y);
+					data.push_back(record);
+
+					/*
+					for (int i = 0; i < data.size(); i++){
+						cout << data.at(i).get_name1() << " = " << data.at(i).get_value1() << endl;
+						cout << data.at(i).get_name2() << " = " << data.at(i).get_value2() << endl;
+					}
+					*/
+				}
+				else {
+					cout << "Values of variable must be in range from 0 to 255" << endl;
+					die();
+				}
+			}
+			else {
+				cout << "You can't redeclare a variable" << endl;
+				die();
+			}
+		}
+			
+		else {
+			die();
+		}
+		
+		vector<char> oper;
+		getline(cin, calculator);
+		erase_space(calculator);
+		//oper = check_operator(calculator);
+		operations = check_operator(calculator);
+		
+		/*
+		for (int i = 0; i < operations.size(); i++) {
+			int position = operations.at(i).get_position();
+			char oper = operations.at(i).get_operators();
+
+			string a_str = calculator.substr(0, position);
+			int a = atoi(a_str.c_str());
+
+
+
+
+			//cout << operations.at(i).get_position() << operations.at(i).get_operators() << endl;
+			
+		}
+		*/
+
+		
+		
+		for (int i = 0; i < operations.size(); i++) {
+			
+			if (operations.at(i).get_operators() == '+')
+				cout << x + y << endl;
+			if (operations.at(i).get_operators() == '-')
+				cout << x - y << endl;
+			if (operations.at(i).get_operators() == '*')
+				cout << x * y << endl;
+			if (operations.at(i).get_operators() == '/')
+				cout << x / y << endl;
+			//cout << oper.at(i) << endl;
+		}
+		
+
+
+		/*
+		if (!cin || cin.eof() || operation == "QUIT") {
+			die();
+		}
+		if (operation == "LOOP") {
+			cin >> x;
+			ivec.push_back(x);
+		}
+		int loop = ivec.at(0).get_loop();
+		cout << loop << endl;
+
+		// get x from teammates
+
+		for (int i = 0; i < loop; i++) {
+			// get x
+			x = x + i;
+		}
+		*/
+
+
+
+		/*
+		for (int i = 0; i < ivec.size(); i++){
+			int loop = ivec.at(i).get_loop();
+			cout << loop << endl;
+		}
+	*/	
+	}
+	return 0;
+}
+
+void uppercaseify(string& mystr) {
+	for (auto& c : mystr)
+		c = toupper(c);
+}
+
+bool checkinput_let(string& input) {
+	erase_space(input);
+	string let = input.substr(0,3);
+	if (let == "LET")
+		return true;
+	else
+		return false;
+}
+
+// Check input 
+bool checkinput_variable(string& input) {
+	erase_space(input);
+	char equal = input.at(4);
+	if (equal == '=')
+		return true;
+	else
+		return false;
+}
+
+// Get variable name in input string
+char get_variable_name(string& input){
+	erase_space(input);
+	char var = input.at(3);// get variable name in input string
+	return var;
+}
+
+// Get variable value in input string
+int get_variable_value(string& input){
+	erase_space(input);
+	string value_str = input.substr(5); // Get values of variable in input string
+	for (auto& c : value_str){
+		if (isdigit(c)){ 
+			int value = atoi(value_str.c_str()); // Convert from string to int
+			return value;
+		}
+		else{
+			die();
+		}
+	}
+	
+}
+
+bool check_range_value(int value){
+	if ((value >= 0) && (value <= 255))
+		return true;
+	else
+		return false;
+}
+
+vector<OPERATION> check_operator(string& input) {
+	OPERATION oper;
+	erase_space(input);
+	//int total_operator = 0;
+	//vector<char> operation;
+	for (auto&c : input) {
+		if (c == '+'){
+			int pos = input.find(c);
+			//total_operator++;
+			oper.set_operators(c);
+			oper.set_position(pos);
+			operations.push_back(oper);
+		}
+		if (c == '-'){
+			int pos = input.find(c);
+			//total_operator++;
+			oper.set_operators(c);
+			oper.set_position(pos);
+			operations.push_back(oper);
+		}
+		if (c == '*'){
+			int pos = input.find(c);
+			//total_operator++;
+			oper.set_operators(c);
+			oper.set_position(pos);
+			operations.push_back(oper);
+		}
+		if (c == '/'){
+			int pos = input.find(c);
+			//total_operator++;
+			oper.set_operators(c);
+			oper.set_position(pos);
+			operations.push_back(oper);
+		}
+	}
+	return operations;
+}
+/*
+vector<char> check_operand(string& input) {
+	erase_space(input);
+	//int total_operator = 0;
+	vector<string> operand;
+	for (auto&c : input) {
+		if (c == '+'){
+			total_operator++;
+			operation.push_back(c);
+		}
+		if (c == '-'){
+			total_operator++;
+			operation.push_back(c);
+		}
+		if (c == '*'){
+			total_operator++;
+			operation.push_back(c);
+		}
+		if (c == '/'){
+			total_operator++;
+			operation.push_back(c);
+		}
+	}
+	return operation;
+}
+*/
+// trim space in string
+void erase_space(string& str){
+	str.erase(remove_if(str.begin(), str.end(), isspace), str.end());
+}
