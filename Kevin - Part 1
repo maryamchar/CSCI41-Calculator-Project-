@@ -1,1 +1,54 @@
+#include <iostream>
+#include <vector>
+#include <ctype.h>
+#include <algorithm>
+#include <cmath>
+using namespace std;
 
+vector<int> numbers;
+vector<string> variables;
+
+void uppercaseify(string& mystr) {                              //Converts the passed in string to all uppercase.
+    for (auto& c: mystr)
+        c = toupper(c);
+}
+
+bool is_alpha(string& mystr) {                                  	//True if the passed in string is all letters.
+    for (auto& c: mystr)
+        if(!(isalpha(c)))
+            return false;
+    return true;
+}
+
+void die() {                                                    		//Exits program.
+    cout << "BAD INPUT" << endl;
+    exit(0);
+}
+
+
+int main() {
+    	int number;                                                 	//All variable declarations
+	string variable;
+    	string operation;
+    	char equals;
+
+    	while(cin) {                                                	//MAIN LOOP.
+        		cin >> operation;
+        		uppercaseify(operation);
+       		 if(operation == "QUIT") break;
+        		 if(operation == "LET") {                               
+            		cin >> variable;
+            		uppercaseify(variable);
+                                    if(std::find(variables.begin(), variables.end(), variable) != variables.end()) die();
+            		if(!(is_alpha(variable))) die();                   
+           		 	else if(variable.size() > 1) die();                
+            		variables.push_back(variable);
+            		cin >> equals;                                     .
+            		if(equals == '=') {
+               			cin >> number;
+                			if(!cin) die();
+                			else if(number < 0 || number > 255) die();                    
+else numbers.push_back(number);
+}
+}
+}
