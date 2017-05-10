@@ -39,6 +39,8 @@ class special_Hash_Table
 		{
 				auto it=variable_Map.find(variable); //Checking to make sure it exists every time.
 				int value= it->second;
+				if(value==255)
+					die();	
 				it->second++;
 				return value;
 		}
@@ -48,7 +50,7 @@ class special_Hash_Table
 		void insert(char variable,int number)
 		{
 			if(number>255)
-				throw runtime_error("BAD INPUT\n"); // Throw exception here instead.
+				throw runtime_error("INVALID INPUT!\n"); // Throw exception here instead.
 			else
 				variable_Map.insert(unordered_map<char,int>::value_type(variable,number));
 		}
@@ -95,7 +97,7 @@ class char_Deque
 //Will be replaced later with proper exception handling.
 void die()
 {
-	cout<<"BAD INPUT\n";
+	cout<<"INVALID INPUT!\n";
 	exit(0);
 }
 
@@ -262,6 +264,8 @@ void fill_Deques(vector<string> &vec,number_Deque &MyNumbers,char_Deque &MyChars
 {
 	unsigned int i=0;
 	bool seen_An_Loop=false;
+	if(vec.size()==1&&(!Map.no_Duplicates))
+		int poo=Map.return_Variable_Value(vec[0][0]);
 	while(i<vec.size())
 	{
 		if(!good_Input(vec.at(i)))
