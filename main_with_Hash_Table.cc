@@ -264,8 +264,6 @@ void fill_Deques(vector<string> &vec,number_Deque &MyNumbers,char_Deque &MyChars
 {
 	unsigned int i=0;
 	bool seen_An_Loop=false;
-	if(vec.size()==1&&(!Map.no_Duplicates))
-		int poo=Map.return_Variable_Value(vec[0][0]);
 	while(i<vec.size())
 	{
 		if(!good_Input(vec.at(i)))
